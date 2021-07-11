@@ -1,0 +1,105 @@
+<html>
+<title>Internet speed test</title>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script type="text/javascript">
+	//JUST AN EXAMPLE, PLEASE USE YOUR OWN PICTURE!
+var imageAddr = "https://s3-us-west-2.amazonaws.com/uw-s3-cdn/wp-content/uploads/sites/6/2017/11/04133712/waterfall.jpg"; 
+var downloadSize = 4995374; //bytes
+
+function ShowProgressMessage(msg) {
+    if (console) {
+        if (typeof msg == "string") {
+            console.log(msg);
+        } else {
+            for (var i = 0; i < msg.length; i++) {
+                console.log(msg[i]);
+            }
+        }
+    }
+    
+    var oProgress = document.getElementById("progress");
+    if (oProgress) {
+        var actualHTML = (typeof msg == "string") ? msg : msg.join("<br />");
+        oProgress.innerHTML = actualHTML;
+    }
+}
+
+function InitiateSpeedDetection() {
+    ShowProgressMessage("<div class='d-flex justify-content-center '> <div style='width: 5rem; height: 5rem;' class='spinner-border text-primary' role='status'> <span class='sr-only'></span> </div> </div>");
+    window.setTimeout(MeasureConnectionSpeed, 1);
+};    
+
+if (window.addEventListener) {
+    window.addEventListener('load', InitiateSpeedDetection, false);
+} else if (window.attachEvent) {
+    window.attachEvent('onload', InitiateSpeedDetection);
+}
+
+function MeasureConnectionSpeed() {
+    var startTime, endTime;
+    var download = new Image();
+    download.onload = function () {
+        endTime = (new Date()).getTime();
+        showResults();
+    }
+    
+    download.onerror = function (err, msg) {
+        ShowProgressMessage("Something went wrong try again!");
+    }
+    
+    startTime = (new Date()).getTime();
+    var cacheBuster = "?nnn=" + startTime;
+    download.src = imageAddr + cacheBuster;
+    
+    function showResults() {
+        var duration = (endTime - startTime) / 1000;
+        var bitsLoaded = downloadSize * 8;
+        var speedBps = (bitsLoaded / duration).toFixed(2);
+        var speedKbps = (speedBps / 1024).toFixed(2);
+        var speedMbps = (speedKbps / 1024).toFixed(2);
+        ShowProgressMessage([
+            "Your connection speed is:", 
+            speedBps + " bps", 
+            speedKbps + " kbps", 
+            speedMbps + " Mbps"
+        ]);
+    }
+}
+function mfunn() {
+	location.reload();
+}
+</script>
+<style type="text/css">
+	nav{
+		padding: 10px 0;
+		background-color: black;
+		color: #fff;
+	}
+	.button{
+		background-color: grey;
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		color: #fff;
+	}
+	.button span{
+		cursor: pointer;
+	}
+</style>
+</head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<body>
+	<nav>
+		<h1 class="text-center">Internet Speed Checker</h1>
+	</nav>
+	<br><br><br>
+<h1 class="text-center" id="progress">JavaScript is turned off, or your browser is realllllly slow</h1>	
+
+</div>
+
+</body>
+</html>
